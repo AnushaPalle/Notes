@@ -1,1 +1,2 @@
 core prompt Elements: Goal + Context ( Additional information )
+Role( optional ) + Goal + Constraints & Extra info ( Recommended )
