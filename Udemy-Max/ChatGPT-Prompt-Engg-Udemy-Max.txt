@@ -1,2 +1,3 @@
 core prompt Elements: Goal + Context ( Additional information )
 Role( optional ) + Goal + Constraints & Extra info ( Recommended )
+U can finetune/Adjust the result as you want on top of received result , u don't have to provide any context this time , bcz it keeps track of history 
