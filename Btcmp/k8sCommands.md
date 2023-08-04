@@ -1,11 +1,11 @@
-Pods
-Replicasets
-Deployment
-Services
-Networking
-Volumes
-Configmaps and secrets
-Deamonsets 
-jobs
-StatefulSets
+Pods  
+Replicasets  
+Deployment  
+Services  
+Networking  
+Volumes  
+Configmaps and secrets  
+Deamonsets   
+jobs  
+StatefulSets  
 
