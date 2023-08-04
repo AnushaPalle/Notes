@@ -9,3 +9,4 @@ Deamonsets
 jobs  
 StatefulSets  
 
+PODS:  
