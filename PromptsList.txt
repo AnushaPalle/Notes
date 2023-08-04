@@ -1,1 +1,86 @@
 write a gitlab yaml file for node js application which imports security jobs from gitlab default ci security template -> this would make use of "include"
+
+PROMPT :
+
+you are very experienced gitlab devops consultant employee , here are the job templates of lint, unit test and build jobs, can you give me consumable gitlab yaml for a node js repo to implement ci cd implementation with these jobs
+location of lint template job file is: /pipeline-template/lang-templates/node/.lint-ci.yml
+lint:
+image: node:16
+stage: static-checks
+before_script:
+- npm config set strict-ssl false
+- npm config set tarball /resources/node-v14.15.0-headers.tar.gz
+- npm install --sass-binary-path=/resources/linux-x64-83_binding.node
+script:
+- echo "lint stage"
+- npm run lint -s > ${LINT_REPORT_FILE}.txt || true
+- npm run lint -s
+after_script:
+- echo "uploading lint report to JFrog"
+- CHECKSUM=$(md5sum ${LINT_REPORT_FILE}.txt | awk '{ print $1 }')
+- curl -Ssf --header "X-Checksum-MD5:${CHECKSUM}" -u "${ARTIFACTORY_USR}:${ARTIFACTORY_PSW}" -T ${LINT_REPORT_FILE}.txt "https://${JFROG_ARTIFACTORY}/${JFROG_REPORTS_PATH}/lint-report/${LINT_REPORT_FILE}.txt" -o /dev/null
+artifacts:
+when: always
+reports:
+codequality: ${LINT_REPORT_FILE}.txt
+expire_in: 1 day
+location of unit-tests template job file is: /pipeline-template/lang-templates/node/.unit-test-ci.yml
+unit-tests:
+image: node:16
+stage: unit-test
+dependencies: []
+coverage: /Statements(?:\s+)?:(?:\s+)?(\d+(?:.\d+)?%)/
+before_script:
+- npm config set strict-ssl false
+- npm config set tarball /resources/node-v14.15.0-headers.tar.gz
+- npm install --sass-binary-path=/resources/linux-x64-83_binding.node
+script:
+- npm run test:coverage
+after_script:
+- echo "uploading unit test report to JFrog"
+- CHECKSUM=$(shasum -a 1 $TEST_COVERAGE_FILE | awk '{ print $1 }')
+- curl -sSf --header "X-Checksum-Sha1:${CHECKSUM}" -u ${ARTIFACTORY_USR}:${ARTIFACTORY_PSW} -T ${TEST_COVERAGE_FILE} "https://${JFROG_ARTIFACTORY}/${JFROG_REPORTS_PATH}/${TEST_COVERAGE_FILE}" -o /dev/null
+artifacts:
+when: always
+reports:
+codequality: ${TEST_COVERAGE_FILE}
+expire_in: 1 day
+location of build template job file is: /pipeline-template/lang-templates/node/.build-ci.yml
+.build:
+image: node:16
+dependencies: []
+script:
+- npm run inBuild:${ENVIRONMENT}
+artifacts:
+paths:
+- dist/
+expire_in: 1 day
+before_script:
+- npm config set strict-ssl false
+- npm config set tarball /resources/node-v14.15.0-headers.tar.gz
+- npm install --sass-binary-path=/resources/linux-x64-83_binding.node
+node-build-pre-prod:
+stage: build
+extends: .build
+variables:
+ENVIRONMENT: preprod
+node-build-prod:
+stage: build-prod
+extends: .build
+variables:
+ENVIRONMENT: prod
+rules:
+- if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+when: manual
+needs: [ cloud-deploy-dev ]
+
+
+Continued
+PROMPTS:
+can you give me single gitlab yaml Configuration just by including these files and not duplicating every thing again in resulting gitlab yaml
+
+can you mention stages as well in the above gitlab yaml file
+
+can you modify gitlab yaml file and give me stage names as static-checks for lint job, unit-test for unit-tests job, build for build job
+
+if the above resulted gitlab yaml file location is /pipeline-template/lang-templates/node/.node-ci.yml, can you include that in a different project repo to get gitlab ci implementation without duplicating everything above and just by including the above file
