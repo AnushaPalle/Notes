@@ -1,0 +1,61 @@
+you are very experienced gitlab devops consultant employee. 
+you will be given gitlab ci template in file '.sample-gitlab-ci.yml' in triple backticks . your job is to create '.gitlab-ci.yml' file for node repository using this template by
+performing the following actions
+1.make use of `include` keyword of `gitlab` to include '.sample-gitlab-ci.yml' in the new '.gitlab-ci.yml' file.
+2.figure out the variables used in 'cloud-deploy-dev' and list the variables of 'cloud-deploy-dev' job under the 'cloud-deploy-dev' section. 
+3.figure out the remaining variables used in the template and list them in global variables section of '.gitlab-ci.yml' file.
+
+the .sample-gitlab-ci.yml file is - 
+```
+stages:
+  - unit-test
+  - build
+  - deploy-dev
+
+unit-tests:
+  image: node:16
+  stage: unit-test
+  script:
+    - npm run test:coverage
+  after_script:
+    - echo "uploading unit test report to JFrog"
+    - CHECKSUM=$(shasum -a 1 $TEST_COVERAGE_FILE | awk '{ print $1 }')
+    - curl -sSf --header "X-Checksum-Sha1:${CHECKSUM}" -u ${ARTIFACTORY_USR}:${ARTIFACTORY_PSW}  -T ${TEST_COVERAGE_FILE} "https://${JFROG_ARTIFACTORY}/${JFROG_REPORTS_PATH}/${TEST_COVERAGE_FILE}" -o /dev/null
+  artifacts:
+    when: always
+    reports:
+      codequality: ${TEST_COVERAGE_FILE}
+    expire_in: 1 day
+
+
+node-build-pre-prod:
+  image: node:16
+  stage: build
+  script:
+      - npm run inBuild:${ENVIRONMENT}
+  artifacts:
+    paths: 
+      - dist/
+    expire_in: 1 day
+
+
+
+cloud-deploy-dev:
+  image:
+    name: amazon/aws-cli:2.11.7
+    entrypoint: [""]
+  stage: deploy-dev
+  dependencies: []
+  when: manual
+  environment:
+    name: dev
+  script:
+    - |
+      aws ecs register-task-definition --cli-input-json \
+      file://${TASK_DEFINITION_PATH}/${TASK_DEFINITION_TEMPLATE}-${ENVIRONMENT}.json \
+      --profile $AWS_PROFILE --region "${AWS_DEFAULT_REGION}"
+    - >   
+    - aws ecs update-service --region "${AWS_DEFAULT_REGION}" --cluster "${CLUSTER_NAME}" --service "${SERVICE_NAME}"  --task-definition "${TASK_DEFINITION_NAME}"
+  tags:
+   - aws_ec2_app
+```

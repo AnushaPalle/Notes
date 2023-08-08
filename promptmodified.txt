@@ -1,0 +1,60 @@
+you are very experienced gitlab devops consultant employee. 
+\nyou will be given gitlab ci template in file '.sample-gitlab-ci.yml' in triple backticks . your job is to create '.gitlab-ci.yml' file for node repository using this template by
+\nperforming the following actions
+\n1.make use of `include` keyword of `gitlab` to include '.sample-gitlab-ci.yml' in the new '.gitlab-ci.yml' file and do not include contents of '.sample-gitlab-ci.yml' file to avoid duplication.
+\n2.figure out the variables used in 'cloud-deploy-dev' in below provided '.sample-gitlab-ci.yml' file and list the variables of 'cloud-deploy-dev' job under the 'cloud-deploy-dev' section. 
+\n3.figure out the remaining variables used in the below '.sample-gitlab-ci.yml' file and list them in global variables section of '.gitlab-ci.yml' file.
+\n
+\nthe .sample-gitlab-ci.yml file is - 
+\n```
+\nstages:
+\n  - unit-test
+\n  - build
+\n  - deploy-dev
+\n
+\nunit-tests:
+\n  image: node:16
+\n  stage: unit-test
+\n  script:
+\n    - npm run test:coverage
+\n  after_script:
+\n    - echo "uploading unit test report to JFrog"
+\n    - CHECKSUM=$(shasum -a 1 $TEST_COVERAGE_FILE | awk '{ print $1 }')
+\n    - curl -sSf --header "X-Checksum-Sha1:${CHECKSUM}" -u ${ARTIFACTORY_USR}:${ARTIFACTORY_PSW}  -T ${TEST_COVERAGE_FILE} "https://${JFROG_ARTIFACTORY}/${JFROG_REPORTS_PATH}/${TEST_COVERAGE_FILE}" -o /dev/null
+\n  artifacts:
+\n    when: always
+\n    reports:
+\n      codequality: ${TEST_COVERAGE_FILE}
+\n    expire_in: 1 day
+\n
+\n
+\nnode-build-pre-prod:
+\n  image: node:16
+\n  stage: build
+\n  script:
+\n      - npm run inBuild:${ENVIRONMENT}
+\n  artifacts:
+\n    paths: 
+\n      - dist/
+\n    expire_in: 1 day
+\n
+\n
+\ncloud-deploy-dev:
+\n  image:
+\n    name: amazon/aws-cli:2.11.7
+\n    entrypoint: [""]
+\n  stage: deploy-dev
+\n  dependencies: []
+\n  when: manual
+\n  environment:
+\n    name: dev
+\n  script:
+\n    - |
+\n      aws ecs register-task-definition --cli-input-json \
+\n      file://${TASK_DEFINITION_PATH}/${TASK_DEFINITION_TEMPLATE}-${ENVIRONMENT}.json \
+\n      --profile $AWS_PROFILE --region "${AWS_DEFAULT_REGION}"
+\n    - >   
+\n    - aws ecs update-service --region "${AWS_DEFAULT_REGION}" --cluster "${CLUSTER_NAME}" --service "${SERVICE_NAME}"  --task-definition "${TASK_DEFINITION_NAME}"
+\n  tags:
+\n   - aws_ec2_app
+\n```

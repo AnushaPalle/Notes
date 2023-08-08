@@ -1,0 +1,97 @@
+play 1:
+
+{
+    "id": "chatcmpl-7lDivKQmBPKgP45EI2F1iUDmg1YZq",
+    "object": "chat.completion",
+    "created": 1691488525,
+    "model": "gpt-3.5-turbo-0613",
+    "choices": [
+        {
+            "index": 0,
+            "message": {
+                "role": "assistant",
+                "content": "```yaml\ninclude:\n  - '.sample-gitlab-ci.yml'\n\ncloud-deploy-dev:\n  variables:\n    - ARTIFACTORY_USR\n    - ARTIFACTORY_PSW\n    - JFROG_ARTIFACTORY\n    - JFROG_REPORTS_PATH\n    - TEST_COVERAGE_FILE\n    - ENVIRONMENT\n    - TASK_DEFINITION_PATH\n    - TASK_DEFINITION_TEMPLATE\n    - AWS_PROFILE\n    - AWS_DEFAULT_REGION\n    - CLUSTER_NAME\n    - SERVICE_NAME\n    - TASK_DEFINITION_NAME\n\nvariables:\n  ARTIFACTORY_USR: ${ARTIFACTORY_USR}\n  ARTIFACTORY_PSW: ${ARTIFACTORY_PSW}\n  JFROG_ARTIFACTORY: ${JFROG_ARTIFACTORY}\n  JFROG_REPORTS_PATH: ${JFROG_REPORTS_PATH}\n  TEST_COVERAGE_FILE: ${TEST_COVERAGE_FILE}\n  ENVIRONMENT: ${ENVIRONMENT}\n  TASK_DEFINITION_PATH: ${TASK_DEFINITION_PATH}\n  TASK_DEFINITION_TEMPLATE: ${TASK_DEFINITION_TEMPLATE}\n  AWS_PROFILE: ${AWS_PROFILE}\n  AWS_DEFAULT_REGION: ${AWS_DEFAULT_REGION}\n  CLUSTER_NAME: ${CLUSTER_NAME}\n  SERVICE_NAME: ${SERVICE_NAME}\n  TASK_DEFINITION_NAME: ${TASK_DEFINITION_NAME}\n```"
+            },
+            "finish_reason": "stop"
+        }
+    ],
+    "usage": {
+        "prompt_tokens": 632,
+        "completion_tokens": 272,
+        "total_tokens": 904
+    }
+}
+
+
+
+{
+    "id": "chatcmpl-7lDuqtpaWik0FV1XKz5ylbY03ES8z",
+    "object": "chat.completion",
+    "created": 1691489264,
+    "model": "gpt-3.5-turbo-0613",
+    "choices": [
+        {
+            "index": 0,
+            "message": {
+                "role": "assistant",
+                "content": "```yaml\ninclude:\n  - local: '.sample-gitlab-ci.yml'\n\ncloud-deploy-dev:\n  variables:\n    - ARTIFACTORY_USR\n    - ARTIFACTORY_PSW\n    - JFROG_ARTIFACTORY\n    - JFROG_REPORTS_PATH\n    - TEST_COVERAGE_FILE\n    - ENVIRONMENT\n    - TASK_DEFINITION_PATH\n    - TASK_DEFINITION_TEMPLATE\n    - AWS_PROFILE\n    - AWS_DEFAULT_REGION\n    - CLUSTER_NAME\n    - SERVICE_NAME\n\nvariables:\n  ARTIFACTORY_USR: ${ARTIFACTORY_USR}\n  ARTIFACTORY_PSW: ${ARTIFACTORY_PSW}\n  JFROG_ARTIFACTORY: ${JFROG_ARTIFACTORY}\n  JFROG_REPORTS_PATH: ${JFROG_REPORTS_PATH}\n  TEST_COVERAGE_FILE: ${TEST_COVERAGE_FILE}\n  ENVIRONMENT: ${ENVIRONMENT}\n  TASK_DEFINITION_PATH: ${TASK_DEFINITION_PATH}\n  TASK_DEFINITION_TEMPLATE: ${TASK_DEFINITION_TEMPLATE}\n  AWS_PROFILE: ${AWS_PROFILE}\n  AWS_DEFAULT_REGION: ${AWS_DEFAULT_REGION}\n  CLUSTER_NAME: ${CLUSTER_NAME}\n  SERVICE_NAME: ${SERVICE_NAME}\n```\n"
+            },
+            "finish_reason": "stop"
+        }
+    ],
+    "usage": {
+        "prompt_tokens": 632,
+        "completion_tokens": 259,
+        "total_tokens": 891
+    }
+}
+
+
+play 3: 
+# .gitlab-ci.yml
+
+include:
+  - '.sample-gitlab-ci.yml'
+
+cloud-deploy-dev:
+  variables:
+    - TASK_DEFINITION_PATH
+    - TASK_DEFINITION_TEMPLATE
+    - ENVIRONMENT
+    - AWS_PROFILE
+    - AWS_DEFAULT_REGION
+    - CLUSTER_NAME
+    - SERVICE_NAME
+    - TASK_DEFINITION_NAME
+
+variables:
+  TEST_COVERAGE_FILE: 'coverage.xml'
+  ARTIFACTORY_USR: 'username'
+  ARTIFACTORY_PSW: 'password'
+  JFROG_ARTIFACTORY: 'https://example.com'
+  JFROG_REPORTS_PATH: 'reports'
+
+
+got expected response for play 3:
+
+{
+    "id": "chatcmpl-7lEXHVVXHhL2dTWLwC98UKUz1StIH",
+    "object": "chat.completion",
+    "created": 1691491647,
+    "model": "gpt-3.5-turbo-0613",
+    "choices": [
+        {
+            "index": 0,
+            "message": {
+                "role": "assistant",
+                "content": "```yaml\n# .gitlab-ci.yml\n\ninclude:\n  - '.sample-gitlab-ci.yml'\n\ncloud-deploy-dev:\n  variables:\n    - TASK_DEFINITION_PATH\n    - TASK_DEFINITION_TEMPLATE\n    - ENVIRONMENT\n    - AWS_PROFILE\n    - AWS_DEFAULT_REGION\n    - CLUSTER_NAME\n    - SERVICE_NAME\n    - TASK_DEFINITION_NAME\n\nvariables:\n  TEST_COVERAGE_FILE: 'coverage.xml'\n  ARTIFACTORY_USR: 'username'\n  ARTIFACTORY_PSW: 'password'\n  JFROG_ARTIFACTORY: 'https://example.com'\n  JFROG_REPORTS_PATH: 'reports'\n```"
+            },
+            "finish_reason": "stop"
+        }
+    ],
+    "usage": {
+        "prompt_tokens": 633,
+        "completion_tokens": 137,
+        "total_tokens": 770
+    }
+}
