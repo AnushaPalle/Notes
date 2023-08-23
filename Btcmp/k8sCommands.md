@@ -17,8 +17,11 @@ kubectl exec pod_name -c container_name -it -- sh  -> incase of multicontainer p
 
 PODS:  
 kubectl get pods -o wide -w  
-kubectl apply -f file_name.yaml  -> creates the pod
+kubectl apply -f file_name.yaml  -> creates the pod  
 kubectl delete pod pod_name  
+
+REPLICASET:  
+kubectl get replicasets  
 
 
 
