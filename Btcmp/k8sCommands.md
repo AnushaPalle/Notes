@@ -22,6 +22,9 @@ kubectl delete pod pod_name
 
 REPLICASET:  
 kubectl get replicasets  
-
+kubectl get replicasets -o wide -w    -> watch mode  
+kubectl describe rs dobby-rs  
+kubectl get pods -o wide --show-labels  
+kubectl delete rs replicaset_name  
 
 
