@@ -25,6 +25,7 @@ kubectl get replicasets
 kubectl get replicasets -o wide -w    -> watch mode  
 kubectl describe rs dobby-rs  
 kubectl get pods -o wide --show-labels  
+kubectl apply -f file_name.yaml  -> creates the replicaset   
 kubectl delete rs replicaset_name  
 
 
