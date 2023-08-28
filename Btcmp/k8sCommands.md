@@ -29,3 +29,11 @@ kubectl apply -f file_name.yaml  -> creates the replicaset
 kubectl delete rs replicaset_name  
 
 
+SERVICE:  
+kubectl get svc  
+kubectl get endpoints  
+kubectl apply -f file_name.yaml  -> creates the service  
+kubectl describe svc service_name  
+kubectl describe endpoints end_point_or_service_name  
+for NodePort: -> get node IP from : kubectl get nodes -o wide -> http://node-ip:nodePort  
+access via DNS: -> DNS is same as service name -> DNS available only inside the pod -> kubectl exec pod_name -it -- sh -> wget -qO "http://dobbysvc:4444/meta"  
