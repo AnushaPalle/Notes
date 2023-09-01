@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: dobby
+spec:
+ replicas: 2
+ strategy: 
+   type: RollingUpdate 
+   rollingUpdate: 
+       maxSurge: 10%
+       maxUnavailable: 10%
+ selector:
+   matchLabels:
+     app: dobby-pod
+ template:
+   metadata:
+     labels:
+       app: dobby-pod
+   spec:
+     containers:
+       - name: dobby
+         image: thecasualcoder/dobby
+         ports:
+           - containerPort: 4444
+         env:
+           - name: VERSION
+             value: "1.0"

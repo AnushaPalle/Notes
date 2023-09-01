@@ -37,3 +37,10 @@ kubectl describe svc service_name
 kubectl describe endpoints end_point_or_service_name  
 for NodePort: -> get node IP from : kubectl get nodes -o wide -> http://node-ip:nodePort  
 access via DNS: -> DNS is same as service name -> DNS available only inside the pod -> kubectl exec pod_name -it -- sh -> wget -qO "http://dobbysvc:4444/meta"  
+
+DEPLOYMENT:  
+kubectl apply -f filename.yaml -> creates the deployment  
+re apply after changing the app ( let's say env ) with above command  
+kubectl rollout history deployment/dobby -> number of versions deployed
+kubectl rollout undo deployment/dobby    
+kubectl rollout undo deployment/dobby --to-revision=1    
