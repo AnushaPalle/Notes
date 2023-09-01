@@ -44,3 +44,10 @@ re apply after changing the app ( let's say env ) with above command
 kubectl rollout history deployment/dobby -> number of versions deployed
 kubectl rollout undo deployment/dobby    
 kubectl rollout undo deployment/dobby --to-revision=1    
+
+VOLUMES:   
+kubectl apply -f filename.yaml  -> creates the object with volume specified  
+kubectl exec podName -c containerName -it -- bash  -> get inside container    
+mount | grep html  +  tail -f /usr/share/nginx/html/index.html  
+tail -f /html/index.html  
+kubectl describe pod podName    
