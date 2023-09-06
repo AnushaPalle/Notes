@@ -51,3 +51,15 @@ kubectl exec podName -c containerName -it -- bash  -> get inside container
 mount | grep html  +  tail -f /usr/share/nginx/html/index.html  
 tail -f /html/index.html  
 kubectl describe pod podName    
+kubectl port-forward pod/host-path-podName 8080:80   
+
+VOLUMES PV & PVC:  
+kubectl get pv  
+kubectl get pvc  
+kubectl apply -f filename.yaml  -> creates the pv | pvc  
+kubectl delete pvc pvc_name -> deletes pvc   
+
+VOLUMES SC:  
+kubectl get sc  
+kubectl apply -f filename.yaml  -> creates the pv dynamically when pvc is created  
+kubectl cordon nodeName -> scheduling disabled for that node     

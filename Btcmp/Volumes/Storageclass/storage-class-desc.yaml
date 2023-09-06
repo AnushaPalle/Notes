@@ -1,0 +1,8 @@
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+ name: my-sc
+provisioner: kubernetes.io/gce-pd
+parameters:
+ type: pd-standard
+ zones: asia-south1-a
