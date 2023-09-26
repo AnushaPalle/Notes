@@ -63,3 +63,11 @@ VOLUMES SC:
 kubectl get sc  
 kubectl apply -f filename.yaml  -> creates the pv dynamically when pvc is created  
 kubectl cordon nodeName -> scheduling disabled for that node     
+
+CONFIGMAPS & SECRETS:  
+kubectl apply -f filename.yaml  -> creates the configmap or secret    
+kubectl get configmap -o wide -w  
+kubectl describe configmap configmap_name_from_yaml_spec  
+kubectl get secret -o wide -w  
+kubectl delete secret secret_name  
+kubectl delete configmap configmap_name  

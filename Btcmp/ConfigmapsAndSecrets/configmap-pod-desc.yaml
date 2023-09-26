@@ -16,3 +16,8 @@ spec:
         configMapKeyRef:
           name: special-config
           key: name
+    - name: SECRET_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: mysecret
+          key: password
