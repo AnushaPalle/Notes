@@ -71,3 +71,10 @@ kubectl describe configmap configmap_name_from_yaml_spec
 kubectl get secret -o wide -w  
 kubectl delete secret secret_name  
 kubectl delete configmap configmap_name  
+
+JOBS & CRON JOBS:  
+kubectl apply -f filename.yaml  -> creates the job or cron job  
+kubectl get jobs  
+kubectl get cj  
+kubectl patch cj cron_job_name --patch '{"spec":{"suspend":true}}'
+kubectl delete cj cron_job_name  
