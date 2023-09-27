@@ -1,6 +1,7 @@
 To install yarn into mac:  
 brew install yarn  
 yarn -v  
+
 yarn init  
 yarn add package_name  
 yarn add package_name@version  

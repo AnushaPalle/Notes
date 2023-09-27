@@ -1,0 +1,11 @@
+{
+  "name": "TraversyMedia-yt-pexa",
+  "version": "1.0.0",
+  "description": "Learn yarn",
+  "main": "index.js",
+  "author": "Anusha Palle",
+  "license": "MIT",
+  "dependencies": {
+    "nodemon": "^3.0.1"
+  }
+}
