@@ -6,6 +6,9 @@ import (
 	"time"
 )
 
+// var whatToSay string : scope of whatToSay (1st letter is lower case) variable is package level : same as "private" access specifier in java,
+// var WhatToSay string : scope of WhatToSay (1st letter is upper case) variable : can be accessed outside of package : same as "public" access specifier in java, same case with functions as well
+
 var packageLevelVar string = "hi"  //local block scope variables always takes precedence over package level variables if they are with same name
 
 //  custom object type : struct
