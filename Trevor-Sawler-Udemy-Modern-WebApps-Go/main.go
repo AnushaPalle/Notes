@@ -1,9 +1,21 @@
 package main
 
-import "fmt"
-import "log"
+import (
+	"fmt"
+	"log"
+	"time"
+)
 
-var packageLevelVar string = "hi"
+var packageLevelVar string = "hi"  //local block scope variables always takes precedence over package level variables if they are with same name
+
+//  custom object type : struct
+type User struct {
+	FirstName   string
+	LastName    string
+	PhoneNumber string
+	Age         int
+	BirthDate   time.Time
+}
 
 func main() {
 	fmt.Println("Hello Ganesh !!")
@@ -29,6 +41,15 @@ func main() {
 	log.Println("myString is set to", myString)
 	changeUsingPointer(&myString)
 	log.Println("after func call myString is set to", myString)
+
+	// accessing objects created from struct
+	user := User {
+		FirstName: "Trevor",
+		LastName: "Sawler",
+		PhoneNumber: "1 555 555 1212",
+	}
+
+	log.Println(user.FirstName, user.LastName, "Birthdate:", user.BirthDate)
 }
 
 // custom functions 
