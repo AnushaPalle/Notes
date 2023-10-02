@@ -20,6 +20,10 @@ type User struct {
 	BirthDate   time.Time
 }
 
+func (u *User) getFirstName() string {
+	return u.FirstName
+}
+
 func main() {
 	fmt.Println("Hello Ganesh !!")
 
@@ -53,6 +57,8 @@ func main() {
 	}
 
 	log.Println(user.FirstName, user.LastName, "Birthdate:", user.BirthDate)
+	//  struct with receiver function: accessing first name through reciver function attached to struct
+	log.Println(user.getFirstName())
 }
 
 // custom functions 
