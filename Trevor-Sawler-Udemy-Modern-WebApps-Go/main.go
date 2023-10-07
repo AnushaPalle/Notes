@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"sort"
 	"time"
 )
 
@@ -59,6 +60,45 @@ func main() {
 	log.Println(user.FirstName, user.LastName, "Birthdate:", user.BirthDate)
 	//  struct with receiver function: accessing first name through reciver function attached to struct
 	log.Println(user.getFirstName())
+
+	// Map
+	mymap := make(map[string]string)
+	mymap["dog"] = "harry"
+	fmt.Println(mymap["dog"])
+
+	// map with custom type
+	myMap := make(map[string]User)
+
+	me := User{
+		FirstName: "Trevor",
+		LastName:  "Sawler",
+	}
+
+	myMap["me"] = me
+
+	log.Println(myMap["me"].FirstName)
+
+	// Slice
+	var mySlice []int 
+	mySlice = append(mySlice, 3)
+	mySlice = append(mySlice, 1)
+	mySlice = append(mySlice, 2)
+	fmt.Println(mySlice)
+	sort.Ints(mySlice)
+	fmt.Println(mySlice)
+
+	// shorthand for slices
+
+	numbers := []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
+	log.Println(numbers)
+
+	// print first two elements of slice, starting at first position
+	log.Println(numbers[0:2])
+
+	// create a slice of strings
+	names := []string{"one", "seven", "fish", "cat"}
+	log.Println(names)
+
 }
 
 // custom functions 
