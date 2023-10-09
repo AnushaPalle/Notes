@@ -5,6 +5,7 @@ import (
 	"log"
 	"sort"
 	"time"
+	"github.com/AnushaPalle/Trevor-Sawler-Udemy-Modern-WebApps-Go/helperpackage"
 )
 
 // var whatToSay string : scope of whatToSay (1st letter is lower case) variable is package level : same as "private" access specifier in java,
@@ -213,6 +214,12 @@ func main() {
 	// https://tour.golang.org/methods/8 for more details).
 	PrintInfo(&gorilla)
 
+	customtype := helperpackage.SomeType {
+		TypeName: "Int",
+		TypeNumber: 1,
+	}
+
+	fmt.Println("This is an example of package in go: instance from helperpackage ", customtype, customtype.TypeName, customtype.TypeNumber)
 }
 
 // custom functions 
