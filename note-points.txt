@@ -9,3 +9,15 @@ Logging  ( for debugging )
 Folder structure 
 Splunk -> data query 
 Kt for beginners 
+
+
+
+reacts JS 
+KOtlin sb 
+sb
+Kafka 
+AWS, 
+Terraform 
+K8s 
+Gh Actions 
+9:30 to 1 PM 
