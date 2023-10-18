@@ -1,0 +1,18 @@
+Scheduler assigns node for the pending pod.
+
+Control manager constantly runs the reconciliation loop .
+
+Desired count of pods is always maintained by control manager .
+
+HostPath 
+Directory is mounted inside the container which is Directory on the host machine 
+Data is retained in the pod even if the pod goes down but not available if pod is scheduled on the other node 
+
+If you have same hostPath specified in two different connected to the same backing node , the data can be shared between those two pods . 
+
+Have persistent volume ( created somewhere ) , now PVC binds PV to the pod and makes it available as volume, this volume is mounted inside the container with volumeMounts attribute 
+
+Storage class: PVC is going to refer SC in its definition , when it is requested , k8s cluster is going to pv for the requested SC and it is going to get bound to Pvc , once it is available volume is going to get mounted inside the container 
+
+
+Provisioners are provided by cloud service providers (csp) , csp is implementing the csi ( container storage interface ) specification to integrate the cloud specific storage with k8s cluster 
