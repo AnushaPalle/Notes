@@ -1,0 +1,3 @@
+
+401 - not a valid user
+403 - missing some permission
