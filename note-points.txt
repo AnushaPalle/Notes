@@ -1,0 +1,11 @@
+
+Kafka 
+Kotlin functional 
+Spring boot beans 
+Ddd 
+Security 
+Data masking
+Logging  ( for debugging )
+Folder structure 
+Splunk -> data query 
+Kt for beginners 
