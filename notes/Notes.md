@@ -1,5 +1,5 @@
 @ResponseBody : serializes an object into JSON, can be applied or annotated on top of a method or class  
-@RestController : = @Controller + @ResponseBody  
+@RestController : = @Controller + @ResponseBody, => can be applied on top of class  
 @ResponseEntity : allows us to return data and a status code: instead of  
 ``` @GetMapping("/contacts/{id}")  
  public Contact getContact(@PathVariable String id){
