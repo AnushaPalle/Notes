@@ -1,0 +1,13 @@
+@ResponseBody : serializes an object into JSON, can be applied or annotated on top of a method or class  
+@RestController : = @Controller + @ResponseBody  
+@ResponseEntity : allows us to return data and a status code: instead of  
+``` @GetMapping("/contacts/{id}")  
+ public Contact getContact(@PathVariable String id){
+     return new Contact("123","John","9876543210");  
+}  ```
+to send status code along with data: below snippet can be replaced
+```@GetMapping("/contacts/{id}")  
+ public ResponseEntity<Contact> getContact(@PathVariable String id){  
+     Contact contact = contactService.getContactById(id);  
+     return new ResponseEntity<>(contact, HttpStatus.OK);  
+}  ```  
