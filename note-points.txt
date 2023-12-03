@@ -12,6 +12,15 @@ Kt for beginners
 
 
 
+Being champion 
+Milestone : include : 
+1. Security
+2. https
+3. tls cert 
+4. dns 
+5. BFF : -> Facade 
+6. CI
+
 reacts JS 
 KOtlin sb 
 sb
