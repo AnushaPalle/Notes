@@ -20,6 +20,20 @@ Milestone : include :
 4. dns 
 5. BFF : -> Facade 
 6. CI
+Highlight : Add link to slides 
+Add checkin : 
+
+Glimpse of activities: 
+1. K8s demo app
+2. Golang todo app
+3. Project updates, SC
+4. 2nd tech talk 
+5. Mars rover instructor
+6. Terraform workshop : IaC by codeHerSpace 
+7. 101 Interviewer Readiness training  
+8. share GenAI recording 
+Share git hub link notes 
+
 
 reacts JS 
 KOtlin sb 
