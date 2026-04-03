@@ -1,0 +1,30 @@
+spring:
+  main:
+    banner-mode: off
+  application:
+    name: alpha
+    
+server:
+  port: 9001
+      
+springdoc:
+  show-actuator: true
+  swagger-ui:
+    supported-submit-methods:
+    tags-sorter: alpha
+    operations-sorter: alpha
+    
+logging:
+  pattern:
+    console: "%clr(%d{HH:mm:ss.SSS}){faint} %clr(${LOG_LEVEL_PATTERN:%5p}) %clr(---){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %clr(%10t){magenta} %m%n${LOG_EXCEPTION_CONVERSION_WORD:%wEx}"    
+    
+management:
+  endpoint:
+    health:
+      enabled: true
+      probes:
+        enabled: true
+  tracing:
+    enabled: false
+#    sampling:
+#      probability: 1.0    
