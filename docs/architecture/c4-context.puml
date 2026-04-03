@@ -1,0 +1,9 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+Person(shopper, "Shopper", "Browses products and places orders")
+System_Boundary(shopflow, "ShopFlow") {
+  Container(monolith, "shopflow-monolith", "Spring Boot", "users, catalog, orders, billing modules")
+}
+Rel(shopper, monolith, "Uses", "HTTPS/JSON")
+@enduml
