@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: shopflow-monolith
+  datasource:
+    url: jdbc:h2:mem:shopflow;DB_CLOSE_DELAY=-1
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
