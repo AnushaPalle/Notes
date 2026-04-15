@@ -1,0 +1,34 @@
+spring:
+  main:
+    banner-mode: off
+  application:
+    name: omega
+  
+server:
+  port: 9004
+#  ssl:#    key-store: bfi.co.id.pfx
+#    key-store-password: P@55word
+#    key-store-type: PKCS12
+#    key-alias: "te-4d3fa332-24ea-434f-a8c9-b3eadc7f55fc"
+
+springdoc:
+  show-actuator: true
+  swagger-ui:
+    supported-submit-methods:
+    tags-sorter: alpha
+    operations-sorter: alpha
+    
+logging:
+  pattern:
+    console: "%clr(%d{HH:mm:ss.SSS}){faint} %clr(${LOG_LEVEL_PATTERN:%5p}) %clr(---){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %clr(%10t){magenta} %m%n${LOG_EXCEPTION_CONVERSION_WORD:%wEx}"
+
+management:
+  endpoint:
+    health:
+      enabled: true
+      probes:
+        enabled: true
+  tracing:
+    enabled: false
+#    sampling:
+#      probability: 1.0    
