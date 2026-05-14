@@ -21,5 +21,6 @@
 
   <modules>
     <module>shopflow-monolith</module>
+    <module>payment-service</module>
   </modules>
 </project>
