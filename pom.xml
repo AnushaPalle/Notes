@@ -20,6 +20,7 @@
   </properties>
 
   <modules>
+    <module>shopflow-contracts</module>
     <module>shopflow-monolith</module>
     <module>payment-service</module>
   </modules>

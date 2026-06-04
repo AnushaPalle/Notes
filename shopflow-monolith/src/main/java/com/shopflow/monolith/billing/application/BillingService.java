@@ -1,14 +1,17 @@
 package com.shopflow.monolith.billing.application;
 
+import com.shopflow.monolith.billing.application.PaymentProcessor.PaymentOutcome;
 import com.shopflow.monolith.billing.contract.PaymentCompleted;
 import com.shopflow.monolith.billing.contract.PaymentFailed;
-import com.shopflow.monolith.billing.application.PaymentProcessor.PaymentOutcome;
 import java.math.BigDecimal;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+/** Synchronous billing (local / rest modes). In kafka mode billing is fully asynchronous instead. */
 @Service
+@ConditionalOnExpression("'${shopflow.payments.mode:local}' != 'kafka'")
 public class BillingService {
 
     private final PaymentProcessor processor;
