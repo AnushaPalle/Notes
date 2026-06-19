@@ -1,0 +1,72 @@
+_format_version: "3.0"
+
+# Declarative (DB-less) Kong config: the edge of ShopFlow.
+# DEMO secrets only. Real secrets belong in a vault / environment, never in git.
+
+services:
+  - name: shopflow-monolith
+    url: http://monolith:8080
+    routes:
+      - name: products-read
+        paths: [/api/products]
+        methods: [GET]
+        strip_path: false
+        plugins:
+          - name: jwt
+          - name: acl
+            config:
+              allow: [shoppers, admins]
+
+      - name: products-write
+        paths: [/api/products]
+        methods: [POST]
+        strip_path: false
+        plugins:
+          - name: jwt
+          - name: acl
+            config:
+              allow: [admins]
+
+      - name: users-and-orders
+        paths: [/api/users, /api/orders]
+        strip_path: false
+        plugins:
+          - name: jwt
+          - name: acl
+            config:
+              allow: [shoppers, admins]
+          - name: rate-limiting
+            config:
+              minute: 30
+              policy: local
+
+plugins:
+  - name: request-size-limiting
+    config:
+      allowed_payload_size: 1
+      size_unit: megabytes
+  - name: correlation-id
+    config:
+      header_name: X-Request-Id
+      generator: uuid
+      echo_downstream: true
+  - name: cors
+    config:
+      origins: ["*"]
+
+consumers:
+  - username: shopper-asha
+    acls:
+      - group: shoppers
+    jwt_secrets:
+      - key: shopper-asha-key
+        algorithm: HS256
+        secret: demo-secret-shopper-change-me-0123456789
+
+  - username: admin-ravi
+    acls:
+      - group: admins
+    jwt_secrets:
+      - key: admin-ravi-key
+        algorithm: HS256
+        secret: demo-secret-admin-change-me-0123456789
