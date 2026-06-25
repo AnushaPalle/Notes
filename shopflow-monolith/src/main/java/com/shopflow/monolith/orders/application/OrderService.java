@@ -6,6 +6,8 @@ import com.shopflow.monolith.orders.domain.Order;
 import com.shopflow.monolith.orders.domain.OrderRepository;
 import com.shopflow.monolith.shared.NotFoundException;
 import com.shopflow.monolith.users.contract.UserQuery;
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.MeterRegistry;
 import java.math.BigDecimal;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -18,13 +20,18 @@ public class OrderService {
     private final UserQuery users;
     private final CatalogQuery catalog;
     private final ApplicationEventPublisher events;
+    private final Counter placed;
+    private final Counter cancelled;
 
     public OrderService(OrderRepository orders, UserQuery users, CatalogQuery catalog,
-                        ApplicationEventPublisher events) {
+                        ApplicationEventPublisher events, MeterRegistry metrics) {
         this.orders = orders;
         this.users = users;
         this.catalog = catalog;
         this.events = events;
+        this.placed = Counter.builder("shopflow.orders.placed").description("Orders placed").register(metrics);
+        this.cancelled = Counter.builder("shopflow.orders.cancelled")
+                .description("Orders cancelled by the payment saga").register(metrics);
     }
 
     @Transactional
@@ -35,6 +42,7 @@ public class OrderService {
         var product = catalog.findBySku(sku).orElseThrow(() -> new NotFoundException("Product " + sku + " not found"));
         var total = product.price().multiply(BigDecimal.valueOf(quantity));
         var order = orders.save(new Order(userId, sku, quantity, total));
+        placed.increment();
         events.publishEvent(new OrderPlaced(order.getId(), total));
         return order;
     }
@@ -48,6 +56,7 @@ public class OrderService {
     @Transactional
     public void cancel(Long orderId) {
         get(orderId).cancel();
+        cancelled.increment();
     }
 
     @Transactional(readOnly = true)
