@@ -1,0 +1,23 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+Person(dev, "App / service", "Sends activity events")
+Person(ops, "Operator", "Watches the dashboard")
+
+System_Boundary(pb, "PulseBoard") {
+  Container(ui, "Dashboard", "React", "Live view (MVVM)")
+  Container(core, "Core API", "Spring Boot, hexagonal", "Ingest, store, project, stream")
+  ContainerDb(db, "Event store + read model", "H2/SQL", "Append-only events, stats projection")
+  Container(notifier, "Notifier", "Node function", "Alert rules and delivery")
+  Container(elk, "Logs", "Logstash, Elasticsearch, Kibana")
+  Container(prom, "Metrics", "Prometheus")
+}
+
+Rel(dev, core, "POST events / signed webhooks")
+Rel(ops, ui, "Uses")
+Rel(ui, core, "REST + SSE")
+Rel(core, db, "Append / project")
+Rel(core, notifier, "HTTP for WARN/ERROR")
+Rel(core, elk, "JSON logs")
+Rel(prom, core, "Scrapes")
+@enduml
