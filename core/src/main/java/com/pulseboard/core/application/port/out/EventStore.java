@@ -10,4 +10,7 @@ public interface EventStore {
 
     /** Newest first. */
     List<ActivityEvent> recent(int limit);
+
+    /** Every event in append order; used to rebuild projections. */
+    List<ActivityEvent> all();
 }

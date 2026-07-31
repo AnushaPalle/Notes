@@ -3,11 +3,13 @@ package com.pulseboard.core.application;
 import com.pulseboard.core.application.port.in.IngestUseCase;
 import com.pulseboard.core.application.port.out.EventPublisher;
 import com.pulseboard.core.application.port.out.EventStore;
+import com.pulseboard.core.application.port.out.ReadModel;
 import com.pulseboard.core.domain.ActivityEvent;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class IngestService implements IngestUseCase {
@@ -15,18 +17,23 @@ public class IngestService implements IngestUseCase {
     private static final Logger log = LoggerFactory.getLogger(IngestService.class);
 
     private final EventStore store;
+    private final ReadModel readModel;
     private final List<EventPublisher> publishers;
 
-    public IngestService(EventStore store, List<EventPublisher> publishers) {
+    public IngestService(EventStore store, ReadModel readModel, List<EventPublisher> publishers) {
         this.store = store;
+        this.readModel = readModel;
         this.publishers = publishers;
     }
 
+    /** Appending the fact and updating the projection commit together. */
     @Override
+    @Transactional
     public Result ingest(ActivityEvent event) {
         if (!store.append(event)) {
             return Result.DUPLICATE;
         }
+        readModel.apply(event);
         for (EventPublisher publisher : publishers) {
             try {
                 publisher.publish(event);
