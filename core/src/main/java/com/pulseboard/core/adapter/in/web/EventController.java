@@ -1,12 +1,13 @@
 package com.pulseboard.core.adapter.in.web;
 
-import com.pulseboard.core.application.port.in.IngestUseCase;
 import com.pulseboard.core.application.port.in.QueryUseCase;
+import com.pulseboard.core.application.port.in.SubmitEventUseCase;
 import com.pulseboard.core.domain.ActivityEvent;
 import com.pulseboard.core.domain.Severity;
 import java.time.Instant;
 import java.util.List;
 import java.util.Map;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,19 +28,22 @@ public class EventController {
         }
     }
 
-    private final IngestUseCase ingest;
+    private final SubmitEventUseCase submit;
     private final QueryUseCase query;
 
-    public EventController(IngestUseCase ingest, QueryUseCase query) {
-        this.ingest = ingest;
+    public EventController(SubmitEventUseCase submit, QueryUseCase query) {
+        this.submit = submit;
         this.query = query;
     }
 
+    /** 202: queued, processed asynchronously. Duplicates are accepted and silently dropped (idempotent). */
     @PostMapping
     public ResponseEntity<Map<String, String>> post(@RequestBody EventRequest request) {
-        var result = ingest.ingest(request.toDomain());
-        var status = result == IngestUseCase.Result.ACCEPTED ? HttpStatus.CREATED : HttpStatus.OK;
-        return ResponseEntity.status(status).body(Map.of("status", result.name()));
+        if (submit.submit(request.toDomain())) {
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body(Map.of("status", "QUEUED"));
+        }
+        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).header(HttpHeaders.RETRY_AFTER, "1")
+                .body(Map.of("error", "ingest queue is full, retry later"));
     }
 
     @GetMapping
