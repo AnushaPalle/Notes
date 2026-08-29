@@ -14,3 +14,8 @@ pulseboard:
     max-attempts: 3
     backoff-ms: 200
     queue-capacity: 1000
+  security:
+    # No defaults on purpose: with nothing configured every /api request is rejected.
+    api-keys: ${PULSEBOARD_API_KEYS:}
+    admin-keys: ${PULSEBOARD_ADMIN_KEYS:}
+    webhook-secret: ${PULSEBOARD_WEBHOOK_SECRET:}

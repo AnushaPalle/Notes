@@ -22,6 +22,8 @@ import org.springframework.test.web.servlet.MockMvc;
 @AutoConfigureMockMvc
 class EventApiTest {
 
+    private static final String KEY = "test-key";
+
     @Autowired
     MockMvc mvc;
     @Autowired
@@ -40,7 +42,7 @@ class EventApiTest {
     }
 
     private void send(String body) throws Exception {
-        mvc.perform(post("/api/events").contentType(MediaType.APPLICATION_JSON).content(body))
+        mvc.perform(post("/api/events").header("X-API-Key", KEY).contentType(MediaType.APPLICATION_JSON).content(body))
                 .andExpect(status().isAccepted()).andExpect(jsonPath("$.status").value("QUEUED"));
     }
 
@@ -55,9 +57,9 @@ class EventApiTest {
         send(body(id));
 
         await().atMost(5, TimeUnit.SECONDS).until(() -> count("SELECT COUNT(*) FROM events WHERE event_id=?", id) == 1);
-        mvc.perform(get("/api/events?limit=5")).andExpect(status().isOk())
+        mvc.perform(get("/api/events?limit=5").header("X-API-Key", KEY)).andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].eventId").value(id));
-        await().atMost(5, TimeUnit.SECONDS).until(() -> count("SELECT COALESCE(SUM(total),0) FROM stats") == 1);
+        await().atMost(5, TimeUnit.SECONDS).until(() -> count("SELECT COALESCE(SUM(total),0) FROM stats WHERE source='billing'") == 1);
     }
 
     @Test
@@ -72,12 +74,12 @@ class EventApiTest {
         // single worker keeps order: once the marker is stored, both copies of `id` were processed
         await().atMost(5, TimeUnit.SECONDS).until(() -> count("SELECT COUNT(*) FROM events WHERE event_id=?", marker) == 1);
         assertEquals(1, count("SELECT COUNT(*) FROM events WHERE event_id=?", id));
-        assertEquals(2, count("SELECT COALESCE(SUM(total),0) FROM stats"));
+        assertEquals(2, count("SELECT COALESCE(SUM(total),0) FROM stats WHERE source='billing'"));
     }
 
     @Test
     void invalidEventIsRejectedSynchronously() throws Exception {
-        mvc.perform(post("/api/events").contentType(MediaType.APPLICATION_JSON)
+        mvc.perform(post("/api/events").header("X-API-Key", KEY).contentType(MediaType.APPLICATION_JSON)
                         .content("{\"eventId\":\"\",\"source\":\"s\",\"type\":\"t\"}"))
                 .andExpect(status().isBadRequest());
     }
