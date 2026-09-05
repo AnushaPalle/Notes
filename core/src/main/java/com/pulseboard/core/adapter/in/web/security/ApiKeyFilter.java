@@ -15,11 +15,13 @@ import org.springframework.web.filter.OncePerRequestFilter;
  * Authenticates /api/** with an API key (header X-API-Key).
  * Two privilege levels: normal keys for ingest and reads, admin keys for /api/admin/**.
  * Webhooks are exempt here because they carry their own HMAC signature.
+ * Browsers cannot set headers on EventSource, so /api/stream alone also accepts ?apiKey=.
  */
 @Component
 public class ApiKeyFilter extends OncePerRequestFilter {
 
     static final String HEADER = "X-API-Key";
+    static final String STREAM_PATH = "/api/stream";
 
     private final SecurityProperties properties;
 
@@ -37,6 +39,9 @@ public class ApiKeyFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException {
         String key = request.getHeader(HEADER);
+        if (key == null && STREAM_PATH.equals(request.getRequestURI())) {
+            key = request.getParameter("apiKey");
+        }
         boolean admin = matches(properties.adminKeys(), key);
         boolean normal = matches(properties.apiKeys(), key);
 
