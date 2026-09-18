@@ -1,0 +1,32 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: PulseBoard notifier - alert rules as a function
+
+Parameters:
+  AlertWebhookUrl:
+    Type: String
+    NoEcho: true
+    Default: ''
+
+Resources:
+  NotifierFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Runtime: nodejs20.x
+      Handler: src/handler.handler
+      CodeUri: .
+      MemorySize: 128
+      Timeout: 5
+      Environment:
+        Variables:
+          ALERT_WEBHOOK_URL: !Ref AlertWebhookUrl
+      Events:
+        Notify:
+          Type: HttpApi
+          Properties:
+            Path: /notify
+            Method: POST
+
+Outputs:
+  NotifyUrl:
+    Value: !Sub 'https://${ServerlessHttpApi}.execute-api.${AWS::Region}.amazonaws.com/notify'

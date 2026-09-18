@@ -1,0 +1,14 @@
+{
+  "name": "pulseboard-notifier",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Serverless-style alert function for PulseBoard",
+  "main": "src/handler.js",
+  "scripts": {
+    "test": "node --test",
+    "start": "node src/server.js"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
