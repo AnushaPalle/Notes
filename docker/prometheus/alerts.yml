@@ -1,0 +1,23 @@
+groups:
+  - name: pulseboard-slo
+    rules:
+      - alert: PulseBoardDeadLettersGrowing
+        expr: increase(pulseboard_events_dead_lettered_total[5m]) > 0
+        for: 1m
+        labels: { severity: warning }
+        annotations:
+          summary: Events are landing in the dead-letter queue
+      - alert: PulseBoardIngestErrorRatioHigh
+        expr: |
+          sum(rate(pulseboard_events_ingested_total{result="error"}[5m]))
+            / clamp_min(sum(rate(pulseboard_events_ingested_total[5m])), 1e-9) > 0.01
+        for: 5m
+        labels: { severity: critical }
+        annotations:
+          summary: More than 1% of ingests fail (SLO breach)
+      - alert: PulseBoardDown
+        expr: up{job="pulseboard-core"} == 0
+        for: 1m
+        labels: { severity: critical }
+        annotations:
+          summary: Core is not scrapeable
